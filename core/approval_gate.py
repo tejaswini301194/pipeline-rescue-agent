@@ -20,18 +20,18 @@ def request_human_approval(deal: dict, diagnosis: dict, recommendation: dict) ->
 
     approved = Confirm.ask("Approve this action?", default=False)
 
-    conn = get_connection()
-    conn.execute("""
-        INSERT INTO approvals (deal_id, proposed_action, status, reviewed_by, reviewed_at)
-        VALUES (?, ?, ?, ?, ?)
-    """, (
-        deal["deal_id"],
-        recommendation["recommended_action"],
-        "approved" if approved else "rejected",
-        "human_reviewer",
-        datetime.now().isoformat(),
-    ))
-    conn.commit()
-    conn.close()
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute("""
+                INSERT INTO approvals (deal_id, proposed_action, status, reviewed_by, reviewed_at)
+                VALUES (%s, %s, %s, %s, %s)
+            """, (
+                deal["deal_id"],
+                recommendation["recommended_action"],
+                "approved" if approved else "rejected",
+                "human_reviewer",
+                datetime.now(),
+            ))
+        conn.commit()
 
     return approved
