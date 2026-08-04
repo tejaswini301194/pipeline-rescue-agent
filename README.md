@@ -144,7 +144,7 @@ A few real issues were found and fixed during development, worth documenting rat
 
 ## Known limitations / what's next
 
-- **No authentication on the API** — anyone who can reach the running server can approve or reject deals. This needs to be addressed (API key, OAuth, or similar) before any real deployment.
+- **API key authentication is in place** for all data-modifying and data-reading endpoints (`/health` intentionally remains open for uptime checks). Not yet OAuth/multi-user — a single shared key, appropriate for this project's current scope.
 - **MCP tools are defined but not yet the primary data-access path** — the orchestrator currently talks to Postgres directly for speed; wiring agents through the MCP client (`core/mcp_client.py`) as the actual data layer is the next architectural step.
 - **Local Postgres only** — not yet pointed at a hosted database.
 - **Not yet containerized or cloud-deployed** — Docker packaging of the FastAPI app and AWS deployment are planned next steps.
