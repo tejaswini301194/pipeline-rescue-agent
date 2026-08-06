@@ -158,3 +158,16 @@ A few real issues were found and fixed during development, worth documenting rat
 - [ ] Wire agents through MCP as the primary tool-calling layer
 - [ ] Add LangSmith or Braintrust tracing for observability
 - [ ] Expand eval suite and publish a reliability report
+
+## Live deployment
+
+This project has been deployed to AWS as a real, working demonstration:
+
+- **Compute**: Docker container running on an EC2 instance (Ubuntu 22.04)
+- **Database**: Amazon RDS (PostgreSQL), publicly accessible with a dedicated security group
+- **Container registry**: Amazon ECR, storing the built image
+- **API authentication**: enforced via `X-API-Key` header on all data-modifying/reading endpoints
+
+**Note:** the live instance is stopped between demos to avoid ongoing cloud costs. To resume it and get a current public URL, restart the EC2 instance and RDS database via the AWS CLI or console, then retrieve the instance's public IP — the container and database contents persist across stop/start cycles.
+
+Deployment was done manually via AWS CLI (ECR push, EC2 provisioning, RDS setup, Docker run with environment-injected secrets) rather than an automated pipeline — a natural next step would be Infrastructure as Code (Terraform or CloudFormation) and a CI/CD pipeline for repeatable deployments.
